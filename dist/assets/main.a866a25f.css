@@ -241,14 +241,6 @@
   font-weight: normal;
   content: '\E017';
 }
-.font-icon_id_instagram:before {
-  text-rendering: auto;
-  -webkit-font-smoothing: auto;
-  -moz-osx-font-smoothing: auto;
-  font-family: zc16b8;
-  font-weight: normal;
-  content: '\E018';
-}
 .font-icon_id_lastfm:before {
   text-rendering: auto;
   -webkit-font-smoothing: auto;
