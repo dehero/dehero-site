@@ -1,0 +1,8 @@
+{
+    "name": "dehero-site",
+    "description": "My personal site's source code",
+    "version": "0.2.0",
+    "repository": "https://github.com/dehero/dehero-site",
+    "author": "dehero <dehero@outlook.com>",
+    "private": true
+}
