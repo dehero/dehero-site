@@ -1,0 +1,182 @@
+---
+import MarkdownImage from './MarkdownImage.astro';
+import MarkdownH1 from './MarkdownH1.astro';
+import { getDocInfo, type Doc } from '../entites/docs';
+import { getDocs } from '../entites/docs';
+import { createTranslatedUrl, LANGUAGES, LANGUAGE_DESCRIPTORS } from '../entites/languages';
+
+interface Props {
+  doc: Doc;
+}
+
+const { doc } = Astro.props;
+const { Content } = await doc.render();
+const info = await getDocInfo(doc);
+const projectInfos =
+  doc.slug === 'index'
+    ? await Promise.all((await getDocs(doc.language, ({ slug }) => slug !== 'index')).map((entry) => getDocInfo(entry)))
+    : [];
+const { strings } = LANGUAGE_DESCRIPTORS[doc.language];
+
+const components = {
+  h1: MarkdownH1,
+  img: MarkdownImage,
+};
+---
+
+<html lang={doc.language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <title>{doc.data.metaTitle || info.title}</title>
+    {doc.data.description && <meta name="description" content={doc.data.description} />}
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <nav class="nav">
+          <a href="/" class="title"><span class="icon">🥾</span> dehero</a>
+          <ul class="language-switcher">
+            {
+              LANGUAGES.map((language) => (
+                <li>
+                  <a href={createTranslatedUrl(Astro.url.pathname, language)}>{LANGUAGE_DESCRIPTORS[language].label}</a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+      </header>
+      <main class="main">
+        <h1>{info.title}</h1>
+        <Content components={components} />
+        {
+          doc.data.links && doc.data.links.length > 0 ? (
+            <>
+              <h2>{strings.links}</h2>
+              <ul>
+                {doc.data.links?.map((link) => (
+                  <li>
+                    <a href={link}>{link}</a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null
+        }
+        {
+          projectInfos.length > 0 ? (
+            <>
+              <h2>{strings.projects}</h2>
+              <ul>
+                {projectInfos.map((project) => (
+                  <li>
+                    <a href={project.url}>{project.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null
+        }
+      </main>
+      <footer class="footer"><p>&copy; dehero, 2024</p></footer>
+    </div>
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+      (function (d, w, c) {
+        (w[c] = w[c] || []).push(function () {
+          try {
+            w.yaCounter11888887 = new Ya.Metrika({
+              id: 11888887,
+              clickmap: true,
+              trackLinks: true,
+              accurateTrackBounce: true,
+              webvisor: true,
+            });
+          } catch (e) {}
+        });
+        var n = d.getElementsByTagName('script')[0],
+          s = d.createElement('script'),
+          f = function () {
+            n.parentNode.insertBefore(s, n);
+          };
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'https://mc.yandex.ru/metrika/watch.js';
+        if (w.opera == '[object Opera]') {
+          d.addEventListener('DOMContentLoaded', f, false);
+        } else {
+          f();
+        }
+      })(document, window, 'yandex_metrika_callbacks');
+    </script>
+    <noscript
+      ><div>
+        <img src="https://mc.yandex.ru/watch/11888887" style="position: absolute; left: -9999px" alt="" />
+      </div></noscript
+    >
+    <!-- /Yandex.Metrika counter -->
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --color-text: #000000;
+    font-family: system-ui;
+    font-size: 16px;
+  }
+
+  body {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    color: var(--color-text);
+    background: #ffffff;
+    margin: 0 16px;
+  }
+</style>
+
+<style>
+  .nav {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: baseline;
+  }
+
+  .title {
+    display: inline-flex;
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: var(--color-text);
+    align-items: flex-start;
+    gap: 4px;
+    flex-grow: 1;
+  }
+
+  .title:hover {
+    color: var(--color-text);
+  }
+
+  .icon {
+    line-height: 1;
+  }
+
+  .language-switcher {
+    display: inline-flex;
+    flex-flow: row nowrap;
+    list-style: none;
+    gap: 4px;
+  }
+
+  .wrapper {
+    margin: 0 auto;
+    width: 40rem;
+    max-width: 100%;
+  }
+
+  .footer {
+    margin-top: 8px;
+  }
+</style>

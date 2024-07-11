@@ -1,0 +1,32 @@
+---
+import Page from '../../components/Page.astro';
+import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
+import { getDoc, getDocs } from '../../entites/docs';
+import { getCurrentLanguage } from '../../entites/languages';
+
+export const getStaticPaths = (async () => {
+  const docs = await getDocs(getCurrentLanguage(), ({ slug }) => slug !== 'index');
+
+  const result = docs.map((doc) => ({
+    params: { slug: doc.slug },
+    props: { doc },
+  }));
+  return result;
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { slug } = Astro.params;
+
+const language = getCurrentLanguage(Astro.url);
+const doc = Astro.props.doc ?? (await getDoc(slug, language));
+
+if (!doc) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found',
+  });
+}
+---
+
+<Page doc={doc} />

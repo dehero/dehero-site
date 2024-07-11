@@ -1,8 +1,24 @@
 {
-    "name": "dehero-site",
-    "description": "My personal site's source code",
-    "version": "0.2.1",
-    "repository": "https://github.com/dehero/dehero-site",
-    "author": "dehero <dehero@outlook.com>",
-    "private": true
+  "name": "dehero-site",
+  "description": "My personal site's source code",
+  "version": "0.3.0",
+  "repository": "https://github.com/dehero/dehero-site",
+  "author": "dehero <dehero@outlook.com>",
+  "private": true,
+  "scripts": {
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "prettify": "prettier --write  ./**/*.{js,jsx,ts,tsx,md,mdx,astro}"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.8.1",
+    "@astrojs/mdx": "^3.1.2",
+    "@types/node": "^20.14.10",
+    "astro": "^4.11.5",
+    "prettier": "^3.3.2",
+    "prettier-plugin-astro": "^0.14.0",
+    "typescript": "^5.5.3"
+  }
 }

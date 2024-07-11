@@ -1,0 +1,17 @@
+---
+import Page from '../components/Page.astro';
+import { getDoc } from '../entites/docs';
+import { getCurrentLanguage } from '../entites/languages';
+
+const language = getCurrentLanguage(Astro.url);
+const doc = await getDoc('index', language);
+
+if (!doc) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not found',
+  });
+}
+---
+
+<Page doc={doc} />
