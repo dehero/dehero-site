@@ -44,7 +44,7 @@ export async function getDocs(
   const docs = await getCollection('docs', (entry) => /^[^\.]+\.mdx$/.test(entry.id) && (!filter || filter(entry)));
 
   if (language !== LANGUAGE_DEFAULT) {
-    const tester = new RegExp(`^[^\\.]+${language}\\.mdx$`);
+    const tester = new RegExp(`^[^\\.]+\\.${language}\\.mdx$`);
     const localizedDocs = await getCollection('docs', (entry) => tester.test(entry.id) && (!filter || filter(entry)));
 
     return docs.map((doc) =>

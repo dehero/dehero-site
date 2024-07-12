@@ -5,7 +5,8 @@ import { getDoc, getDocs } from '../../entites/docs';
 import { getCurrentLanguage } from '../../entites/languages';
 
 export const getStaticPaths = (async () => {
-  const docs = await getDocs(getCurrentLanguage(), ({ slug }) => slug !== 'index');
+  const language = getCurrentLanguage();
+  const docs = await getDocs(language, ({ slug }) => slug !== 'index');
 
   const result = docs.map((doc) => ({
     params: { slug: doc.slug },
