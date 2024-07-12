@@ -4,5 +4,6 @@ export default {
   strings: {
     links: 'Links',
     projects: 'Projects',
+    site: 'Site',
   },
 } as const;

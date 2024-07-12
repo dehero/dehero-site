@@ -1,0 +1,47 @@
+---
+import { Icon } from 'astro-icon/components';
+import { serviceByUrl } from '../entites/services';
+import { getCurrentLanguage, LANGUAGE_DESCRIPTORS } from '../entites/languages';
+
+export interface Props {
+  links: string[];
+}
+const { links } = Astro.props;
+
+const language = getCurrentLanguage(Astro.url);
+const { strings } = LANGUAGE_DESCRIPTORS[language];
+---
+
+<ul class="list">
+  {
+    links.map((link) => {
+      const service = serviceByUrl(link);
+      return (
+        <li class="item">
+          <a href={link} class="link">
+            {service ? <Icon name={service} class="icon" /> : strings.site}
+          </a>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .list {
+    display: inline-flex;
+    list-style: none;
+    gap: 8px;
+    font-size: 1.5rem;
+    padding: 0;
+  }
+
+  .link {
+    text-decoration: none;
+    color: var(--color-accent);
+  }
+
+  .link:hover {
+    color: var(--color-accent);
+  }
+</style>

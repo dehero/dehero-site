@@ -1,7 +1,7 @@
 {
   "name": "dehero-site",
   "description": "My personal site's source code",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "repository": "https://github.com/dehero/dehero-site",
   "author": "dehero <dehero@outlook.com>",
   "private": true,
@@ -17,6 +17,7 @@
     "@astrojs/mdx": "^3.1.2",
     "@types/node": "^20.14.10",
     "astro": "^4.11.5",
+    "astro-icon": "^1.1.0",
     "prettier": "^3.3.2",
     "prettier-plugin-astro": "^0.14.0",
     "typescript": "^5.5.3"
