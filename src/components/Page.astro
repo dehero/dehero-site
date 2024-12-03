@@ -1,6 +1,7 @@
 ---
 import MarkdownImage from './MarkdownImage.astro';
 import MarkdownH1 from './MarkdownH1.astro';
+import MarkdownBlockquote from './MarkdownBlockquote.astro';
 import { getDocInfo, type Doc } from '../entites/docs';
 import { getDocs } from '../entites/docs';
 import { createTranslatedUrl, LANGUAGES, LANGUAGE_DESCRIPTORS } from '../entites/languages';
@@ -22,6 +23,7 @@ const { strings } = LANGUAGE_DESCRIPTORS[doc.language];
 const components = {
   h1: MarkdownH1,
   img: MarkdownImage,
+  blockquote: MarkdownBlockquote,
 };
 ---
 
