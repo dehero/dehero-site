@@ -19,7 +19,11 @@ const { Content } = await doc.render();
 const info = await getDocInfo(doc);
 const projectInfos =
   doc.slug === 'index'
-    ? await Promise.all((await getDocs(doc.language, ({ slug }) => slug !== 'index')).map((entry) => getDocInfo(entry)))
+    ? (
+        await Promise.all(
+          (await getDocs(doc.language, ({ slug }) => slug !== 'index')).map((entry) => getDocInfo(entry)),
+        )
+      ).sort((a, b) => a.slug.localeCompare(b.slug, 'en'))
     : [];
 const { strings } = LANGUAGE_DESCRIPTORS[doc.language];
 
@@ -149,7 +153,7 @@ const components = {
     font-size: 1.5rem;
     color: var(--color-text);
     align-items: center;
-    gap: 4px;
+    gap: 8px;
   }
 
   .title:hover {
@@ -159,9 +163,9 @@ const components = {
   .icon {
     display: inline-block;
     line-height: 1;
-    width: 48px;
-    height: 48px;
-    margin-left: -14px;
+    width: 36px;
+    height: 49px;
+    margin-left: -8px;
   }
 
   .language-switcher {
