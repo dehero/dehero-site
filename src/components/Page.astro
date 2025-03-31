@@ -12,6 +12,8 @@ interface Props {
   doc: Doc;
 }
 
+const year = new Date().getFullYear();
+
 const { doc } = Astro.props;
 const { Content } = await doc.render();
 const info = await getDocInfo(doc);
@@ -75,7 +77,7 @@ const components = {
           ) : null
         }
       </main>
-      <footer class="footer"><p>&copy; dehero, 2024</p></footer>
+      <footer class="footer"><p>&copy; dehero, {year}</p></footer>
     </div>
     <!-- Yandex.Metrika counter -->
     <script is:inline type="text/javascript">
