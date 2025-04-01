@@ -7,6 +7,7 @@ import { getDocs } from '../entites/docs';
 import { createTranslatedUrl, LANGUAGES, LANGUAGE_DESCRIPTORS } from '../entites/languages';
 import Links from './Links.astro';
 import Lantern from '../icons/lantern.svg';
+import { render } from 'astro:content';
 
 interface Props {
   doc: Doc;
@@ -15,15 +16,14 @@ interface Props {
 const year = new Date().getFullYear();
 
 const { doc } = Astro.props;
-const { Content } = await doc.render();
+
+const { Content } = await render(doc);
 const info = await getDocInfo(doc);
 const projectInfos =
-  doc.slug === 'index'
+  doc.id === 'index'
     ? (
-        await Promise.all(
-          (await getDocs(doc.language, ({ slug }) => slug !== 'index')).map((entry) => getDocInfo(entry)),
-        )
-      ).sort((a, b) => a.slug.localeCompare(b.slug, 'en'))
+        await Promise.all((await getDocs(doc.language, ({ id }) => id !== 'index')).map((entry) => getDocInfo(entry)))
+      ).sort((a, b) => a.id.localeCompare(b.id, 'en'))
     : [];
 const { strings } = LANGUAGE_DESCRIPTORS[doc.language];
 
@@ -47,7 +47,7 @@ const components = {
     <div class="wrapper">
       <header class="header">
         <nav class="nav">
-          <a href="/" class="title">
+          <a href={createTranslatedUrl('/', doc.language)} class="title">
             <img src={Lantern.src} width={Lantern.width} height={Lantern.height} alt="" class="icon" />
             dehero
           </a>
