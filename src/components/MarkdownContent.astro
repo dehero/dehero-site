@@ -1,0 +1,8 @@
+---
+import { getCurrentLanguage } from '../entities/languages';
+
+const language = getCurrentLanguage(Astro.url);
+const props = Astro.props;
+---
+
+{props.lang === language && <slot />}

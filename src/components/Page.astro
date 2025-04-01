@@ -2,9 +2,10 @@
 import MarkdownImage from './MarkdownImage.astro';
 import MarkdownH1 from './MarkdownH1.astro';
 import MarkdownBlockquote from './MarkdownBlockquote.astro';
-import { getDocInfo, type Doc } from '../entites/docs';
-import { getDocs } from '../entites/docs';
-import { createTranslatedUrl, LANGUAGES, LANGUAGE_DESCRIPTORS } from '../entites/languages';
+import MarkdownContent from './MarkdownContent.astro';
+import { getDocInfo, type Doc } from '../entities/docs';
+import { getDocs, getDocDescription, getDocMetaTitle } from '../entities/docs';
+import { createTranslatedUrl, LANGUAGES, LANGUAGE_DESCRIPTORS, getCurrentLanguage } from '../entities/languages';
 import Links from './Links.astro';
 import Lantern from '../icons/lantern.svg';
 import { render } from 'astro:content';
@@ -17,37 +18,41 @@ const year = new Date().getFullYear();
 
 const { doc } = Astro.props;
 
+const currentLanguage = getCurrentLanguage(Astro.url);
 const { Content } = await render(doc);
-const info = await getDocInfo(doc);
+const info = await getDocInfo(doc, currentLanguage);
 const projectInfos =
   doc.id === 'index'
     ? (
-        await Promise.all((await getDocs(doc.language, ({ id }) => id !== 'index')).map((entry) => getDocInfo(entry)))
+        await Promise.all(
+          (await getDocs(({ id }) => id !== 'index')).map((entry) => getDocInfo(entry, currentLanguage)),
+        )
       ).sort((a, b) => a.id.localeCompare(b.id, 'en'))
     : [];
-const { strings } = LANGUAGE_DESCRIPTORS[doc.language];
+const { strings } = LANGUAGE_DESCRIPTORS[currentLanguage];
 
 const components = {
   h1: MarkdownH1,
   img: MarkdownImage,
   blockquote: MarkdownBlockquote,
+  Content: MarkdownContent,
 };
 ---
 
-<html lang={doc.language}>
+<html lang={currentLanguage}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="/favicon.ico" />
-    <title>{doc.data.metaTitle || info.title}</title>
-    {doc.data.description && <meta name="description" content={doc.data.description} />}
+    <title>{getDocMetaTitle(doc, currentLanguage) || info.title}</title>
+    {doc.data.description && <meta name="description" content={getDocDescription(doc, currentLanguage)} />}
   </head>
 
   <body>
     <div class="wrapper">
       <header class="header">
         <nav class="nav">
-          <a href={createTranslatedUrl('/', doc.language)} class="title">
+          <a href={createTranslatedUrl('/', currentLanguage)} class="title">
             <img src={Lantern.src} width={Lantern.width} height={Lantern.height} alt="" class="icon" />
             dehero
           </a>

@@ -1,14 +1,12 @@
 ---
 import Page from '../../components/Page.astro';
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
-import { getDoc, getDocs } from '../../entites/docs';
-import { getCurrentLanguage } from '../../entites/languages';
+import { getDoc, getDocs } from '../../entities/docs';
 
 export const prerender = !import.meta.env.DEV;
 
 export const getStaticPaths = (async () => {
-  const language = getCurrentLanguage();
-  const docs = await getDocs(language, ({ id }) => id !== 'index');
+  const docs = await getDocs(({ id }) => id !== 'index');
 
   const result = docs.map((doc) => ({
     params: { slug: doc.id },
@@ -20,9 +18,7 @@ export const getStaticPaths = (async () => {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { slug } = Astro.params;
-
-const language = getCurrentLanguage(Astro.url);
-const doc = Astro.props.doc ?? (await getDoc(slug, language));
+const doc = Astro.props.doc ?? (await getDoc(slug));
 
 if (!doc) {
   return new Response(null, {

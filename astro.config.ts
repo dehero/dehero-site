@@ -1,7 +1,8 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
-import { LANGUAGE_DESCRIPTORS, validateLanguage } from './src/entites/languages';
+import { LANGUAGE_DESCRIPTORS, validateLanguage } from './src/entities/languages';
 import icon from 'astro-icon';
+import remarkGfm from 'remark-gfm';
 
 const language = validateLanguage(process.env.LANGUAGE);
 
@@ -10,6 +11,9 @@ export default defineConfig({
   integrations: [
     mdx({
       syntaxHighlight: false,
+      remarkPlugins: [remarkGfm],
+      gfm: true,
+      extendMarkdownConfig: false,
     }),
     icon(),
   ],

@@ -1,10 +1,8 @@
 ---
 import Page from '../components/Page.astro';
-import { getDoc } from '../entites/docs';
-import { getCurrentLanguage } from '../entites/languages';
+import { getDoc } from '../entities/docs';
 
-const language = getCurrentLanguage(Astro.url);
-const doc = await getDoc('index', language);
+const doc = await getDoc('index');
 
 if (!doc) {
   return new Response(null, {
