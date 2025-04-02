@@ -130,6 +130,9 @@ const components = {
   :root {
     --color-text: #000000;
     --color-accent: #ad712c;
+    --color-accent-hover: var(--color-link);
+    --color-link: #2c5481;
+    --color-link-hover: var(--color-accent);
     font-family: system-ui;
     font-size: 16px;
   }
@@ -141,6 +144,19 @@ const components = {
     color: var(--color-text);
     background: #ffffff;
     margin: 0 16px;
+  }
+
+  a {
+    color: var(--color-link);
+    /* text-decoration: none;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--color-link-underline); */
+  }
+
+  a:hover,
+  a:active {
+    color: var(--color-link-hover);
   }
 </style>
 

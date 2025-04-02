@@ -1,6 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { serviceByUrl } from '../entities/services';
+import { getLinkInfo } from '../entities/services';
 import { getCurrentLanguage, LANGUAGE_DESCRIPTORS } from '../entities/languages';
 
 export interface Props {
@@ -15,11 +15,15 @@ const { strings } = LANGUAGE_DESCRIPTORS[language];
 <ul class="list">
   {
     links.map((link) => {
-      const service = serviceByUrl(link);
+      const info = getLinkInfo(link);
       return (
         <li class="item">
           <a href={link} class="link">
-            {service ? <Icon name={service} class="icon" /> : strings.site}
+            {info.service && <Icon name={info.service} class:list={['icon', info.service]} />}
+            <p class="title">
+              <span class="service">{info.service ? strings[info.service] : strings.site}</span>
+              <span class="profile">{info.label}</span>
+            </p>
           </a>
         </li>
       );
@@ -29,19 +33,47 @@ const { strings } = LANGUAGE_DESCRIPTORS[language];
 
 <style>
   .list {
-    display: inline-flex;
+    display: flex;
     list-style: none;
-    gap: 8px;
-    font-size: 1.5rem;
+    gap: 0.75rem 1rem;
     padding: 0;
+    line-height: 1;
+    flex-flow: row wrap;
+  }
+
+  .item {
+    flex: 1 1 200px;
   }
 
   .link {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.5rem;
     text-decoration: none;
     color: var(--color-accent);
   }
 
   .link:hover {
-    color: var(--color-accent);
+    color: var(--color-accent-hover);
+  }
+
+  .icon {
+    font-size: 1.5rem;
+  }
+
+  .title {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 0;
+  }
+
+  .service {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    text-decoration: underline;
+  }
+
+  .profile {
+    font-size: 0.75rem;
   }
 </style>
