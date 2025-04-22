@@ -1,5 +1,5 @@
 const services = {
-  github: /github\.com\/([^\/]+)/,
+  github: /github\.com\/((?:[^\/]+\/)?[^\/]+)/,
   email: /mailto:([^&]+)/,
   instagram: /instagram\.com\/([^\/]+)/,
   lastfm: /last\.fm\/user\/([^\/]+)/,
