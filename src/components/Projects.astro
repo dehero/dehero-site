@@ -1,0 +1,76 @@
+---
+import { Image } from 'astro:assets';
+import type { DocInfo } from '../entities/docs';
+
+export interface Props {
+  projectInfos: DocInfo[];
+}
+const { projectInfos } = Astro.props;
+---
+
+<ul class="list">
+  {
+    projectInfos.map((project) => (
+      <li class="item">
+        <a href={project.url} class="link">
+          {project.icon && <Image src={project.icon} alt={project.title} class="icon" />}
+          <p class="info">
+            <span class="title">{project.title}</span>
+            <span class="description">{project.description}</span>
+          </p>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .list {
+    display: flex;
+    list-style: none;
+    gap: 0.75rem 1rem;
+    padding: 0;
+    line-height: 1;
+    flex-flow: row wrap;
+  }
+
+  .item {
+    flex: 1 1 300px;
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--color-link);
+  }
+
+  .link:hover {
+    color: var(--color-link-hover);
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .info {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 0;
+  }
+
+  .title {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    text-decoration: underline;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .description {
+    font-size: 0.75rem;
+  }
+</style>

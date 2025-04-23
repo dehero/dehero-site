@@ -7,10 +7,12 @@ export type Doc = CollectionEntry<'docs'>;
 
 export type DocId = Doc['id'];
 
-interface DocInfo {
+export interface DocInfo {
   id: string;
   title: string;
   url: string;
+  icon: Doc['data']['icon'];
+  description: string | undefined;
 }
 
 export async function getDocInfo(doc: Doc, language: Language): Promise<DocInfo> {
@@ -26,6 +28,8 @@ export async function getDocInfo(doc: Doc, language: Language): Promise<DocInfo>
     id: doc.id,
     title: mainHeading?.text || doc.id,
     url: createTranslatedUrl(`/${doc.id}/`, language),
+    icon: doc.data.icon,
+    description: getDocDescription(doc, language),
   };
 }
 
@@ -40,6 +44,11 @@ export async function getDoc(id: DocId): Promise<Doc | undefined> {
 export function getDocMetaTitle(doc: Doc, language: Language) {
   return typeof doc.data.metaTitle === 'string' ? doc.data.metaTitle : doc.data.metaTitle?.[language];
 }
+
+export function getDocMetaDescription(doc: Doc, language: Language) {
+  return typeof doc.data.metaDescription === 'string' ? doc.data.metaDescription : doc.data.metaDescription?.[language];
+}
+
 
 export function getDocDescription(doc: Doc, language: Language) {
   return typeof doc.data.description === 'string' ? doc.data.description : doc.data.description?.[language];

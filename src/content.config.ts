@@ -3,14 +3,16 @@ import { glob } from 'astro/loaders';
 
 const docs = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './docs' }),
-  schema: () =>
+  schema: ({ image }) =>
     z.object({
-      metaTitle: z.optional(z.string().or(z.record(z.string(), z.string()))),
       description: z.optional(z.string().or(z.record(z.string(), z.string()))),
+      metaTitle: z.optional(z.string().or(z.record(z.string(), z.string()))),
+      metaDescription: z.optional(z.string().or(z.record(z.string(), z.string()))),
       started: z.coerce.date().optional(),
       published: z.coerce.date().optional(),
       finished: z.coerce.date().optional(),
       links: z.array(z.string()).optional(),
+      icon: image().optional(),
     }),
 });
 
