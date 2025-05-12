@@ -13,6 +13,8 @@ export interface DocInfo {
   url: string;
   icon: Doc['data']['icon'];
   description: string | undefined;
+  started: Date | undefined;
+  finished: Date | undefined;
 }
 
 export async function getDocInfo(doc: Doc, language: Language): Promise<DocInfo> {
@@ -30,6 +32,8 @@ export async function getDocInfo(doc: Doc, language: Language): Promise<DocInfo>
     url: createTranslatedUrl(`/${doc.id}/`, language),
     icon: doc.data.icon,
     description: getDocDescription(doc, language),
+    started: doc.data.started,
+    finished: doc.data.finished,
   };
 }
 

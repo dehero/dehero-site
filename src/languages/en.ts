@@ -2,6 +2,7 @@ export default {
   label: 'EN',
   site: 'https://dehero.site',
   strings: {
+    from: 'From',
     links: 'Links',
     projects: 'Projects',
     site: 'Site',

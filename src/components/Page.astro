@@ -16,8 +16,6 @@ interface Props {
   doc: Doc;
 }
 
-const year = new Date().getFullYear();
-
 const { doc } = Astro.props;
 
 const currentLanguage = getCurrentLanguage(Astro.url);
@@ -33,6 +31,13 @@ const projectInfos =
         )
       ).sort((a, b) => a.id.localeCompare(b.id, 'en'))
     : [];
+
+const year = new Date().getFullYear();
+const startYear =
+  projectInfos.length > 0
+    ? Math.min(...projectInfos.map((a) => a.started?.getFullYear() ?? year))
+    : info.started?.getFullYear();
+
 const { strings } = LANGUAGE_DESCRIPTORS[currentLanguage];
 
 const components = {
@@ -87,6 +92,19 @@ const components = {
         </nav>
       </header>
       <main class="main">
+        {
+          doc.data.started && doc.data.finished ? (
+            <p class="timeline">
+              {doc.data.started.toLocaleDateString(currentLanguage, { dateStyle: 'long' })}
+              {' — '}
+              {doc.data.finished.toLocaleDateString(currentLanguage, { dateStyle: 'long' })}
+            </p>
+          ) : doc.data.started ? (
+            <p class="timeline">
+              {strings.from} {doc.data.started.toLocaleDateString(currentLanguage, { dateStyle: 'long' })}
+            </p>
+          ) : undefined
+        }
         <Content components={components} />
         {
           projectInfos.length > 0 ? (
@@ -109,7 +127,8 @@ const components = {
         indexDocInfo && (
           <footer class="footer">
             <p>
-              &copy; <a href={createTranslatedUrl('/', currentLanguage)}>{indexDocInfo.title}</a>, {year}
+              &copy; <a href={createTranslatedUrl('/', currentLanguage)}>{indexDocInfo.title}</a>,{' '}
+              {startYear && startYear !== year ? `${startYear}—${year}` : year}
             </p>
           </footer>
         )
@@ -257,6 +276,10 @@ const components = {
 
   .main :global(*):first-child {
     margin-top: 0;
+  }
+
+  .timeline {
+    color: var(--color-accent);
   }
 
   .footer {
