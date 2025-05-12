@@ -13,6 +13,7 @@ const docs = defineCollection({
       finished: z.coerce.date().optional(),
       links: z.array(z.string()).optional(),
       icon: image().optional(),
+      updateFrequency: z.number().optional(),
     }),
 });
 
