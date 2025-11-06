@@ -9,11 +9,11 @@ jobs:
   maintain:
     runs-on: ubuntu-latest
     env:
-      SITE_FTP_HOST: '${{ secrets.SITE_FTP_HOST }}'
-      SITE_FTP_USER: '${{ secrets.SITE_FTP_USER }}'
-      SITE_FTP_PASSWORD: '${{ secrets.SITE_FTP_PASSWORD }}'
-      SITE_FTP_STORE_PATH_EN: '${{ secrets.SITE_FTP_STORE_PATH_EN }}'
-      SITE_FTP_STORE_PATH_RU: '${{ secrets.SITE_FTP_STORE_PATH_RU }}'
+      SITE_SSH_HOST: '${{ secrets.SITE_SSH_HOST }}'
+      SITE_SSH_USER: '${{ secrets.SITE_SSH_USER }}'
+      SITE_SSH_PRIVATE_KEY: '${{ secrets.SITE_SSH_PRIVATE_KEY }}'
+      SITE_SSH_PATH_EN: '${{ secrets.SITE_SSH_PATH_EN }}'
+      SITE_SSH_PATH_RU: '${{ secrets.SITE_SSH_PATH_RU }}'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -32,24 +32,40 @@ jobs:
         run: npm run build
 
       - name: Deploy English site version
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.SITE_FTP_HOST }}
-          username: ${{ secrets.SITE_FTP_USER }}
-          password: ${{ secrets.SITE_FTP_PASSWORD }}
-          server-dir: ${{ secrets.SITE_FTP_PATH_EN }}
-          local-dir: ./dist/
-          exclude: ./store/**
+        uses: easingthemes/ssh-deploy@v5.1.0
+        env:
+          SSH_PRIVATE_KEY: ${{ env.SITE_SSH_PRIVATE_KEY }}
+          ARGS: '-rltgoDzvO --delete'
+          SOURCE: 'dist/'
+          REMOTE_HOST: ${{ env.SITE_SSH_HOST }}
+          REMOTE_USER: ${{ env.SITE_SSH_USER }}
+          TARGET: ${{ env.SITE_SSH_PATH_EN }}
+          SCRIPT_BEFORE: |
+            whoami
+            ls -al > /dev/null
+          SCRIPT_AFTER: |
+            whoami
+            ls -al > /dev/null
+            echo $RSYNC_STDOUT
+            exit
 
       - name: Build Russian site version
         run: LANGUAGE=ru npm run build
 
       - name: Deploy Russian site version
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.SITE_FTP_HOST }}
-          username: ${{ secrets.SITE_FTP_USER }}
-          password: ${{ secrets.SITE_FTP_PASSWORD }}
-          server-dir: ${{ secrets.SITE_FTP_PATH_RU }}
-          local-dir: ./dist/
-          exclude: ./store/**
+        uses: easingthemes/ssh-deploy@v5.1.0
+        env:
+          SSH_PRIVATE_KEY: ${{ env.SITE_SSH_PRIVATE_KEY }}
+          ARGS: '-rltgoDzvO --delete'
+          SOURCE: 'dist/'
+          REMOTE_HOST: ${{ env.SITE_SSH_HOST }}
+          REMOTE_USER: ${{ env.SITE_SSH_USER }}
+          TARGET: ${{ env.SITE_SSH_PATH_RU }}
+          SCRIPT_BEFORE: |
+            whoami
+            ls -al > /dev/null
+          SCRIPT_AFTER: |
+            whoami
+            ls -al > /dev/null
+            echo $RSYNC_STDOUT
+            exit
