@@ -1,12 +1,12 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { getLinkInfo } from '../entities/services';
 import { getCurrentLanguage, LANGUAGE_DESCRIPTORS } from '../entities/languages';
+import type { LinkInfo } from '../entities/services';
 
 export interface Props {
-  links: string[];
+  linkInfos: LinkInfo[];
 }
-const { links } = Astro.props;
+const { linkInfos } = Astro.props;
 
 const language = getCurrentLanguage(Astro.url);
 const { strings } = LANGUAGE_DESCRIPTORS[language];
@@ -14,31 +14,28 @@ const { strings } = LANGUAGE_DESCRIPTORS[language];
 
 <ul class="list">
   {
-    links.map((link) => {
-      const info = getLinkInfo(link);
-      return (
-        <li class="item">
-          <a href={link} class="link">
-            {info.service && <Icon name={info.service} class:list={['icon', info.service]} />}
-            <p class="title">
-              <span class="service">{info.service ? strings[info.service] : strings.site}</span>
-              <span class="profile">{info.label}</span>
-            </p>
-          </a>
-        </li>
-      );
-    })
+    linkInfos.map((info) => (
+      <li class="item">
+        <a href={info.uri} class="link">
+          <Icon name={info.service ?? 'site'} class:list={['icon', info.service]} />
+          <p class="title">
+            <span class="service">{info.service ? strings[info.service] : strings.site}</span>
+            <span class="profile">{info.label}</span>
+          </p>
+        </a>
+      </li>
+    ))
   }
 </ul>
 
 <style>
   .list {
-    display: flex;
+    display: grid;
     list-style: none;
     gap: 0.75rem 1rem;
     padding: 0;
     line-height: 1;
-    flex-flow: row wrap;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 
   .item {
@@ -58,7 +55,7 @@ const { strings } = LANGUAGE_DESCRIPTORS[language];
   }
 
   .icon {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
 
   .title {
@@ -69,7 +66,7 @@ const { strings } = LANGUAGE_DESCRIPTORS[language];
 
   .service {
     font-size: 1rem;
-    line-height: 1.5rem;
+    line-height: 2rem;
     text-decoration: underline;
   }
 

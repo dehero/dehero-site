@@ -55,7 +55,6 @@ export function getDocMetaDescription(doc: Doc, language: Language) {
   return typeof doc.data.metaDescription === 'string' ? doc.data.metaDescription : doc.data.metaDescription?.[language];
 }
 
-
 export function getDocDescription(doc: Doc, language: Language) {
   return typeof doc.data.description === 'string' ? doc.data.description : doc.data.description?.[language];
 }

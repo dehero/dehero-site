@@ -11,6 +11,7 @@ import { render } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
 import Projects from './Projects.astro';
+import { getLinkInfo, SERVICE_TYPES } from '../entities/services';
 
 interface Props {
   doc: Doc;
@@ -36,6 +37,7 @@ const projectInfos =
           a.id.localeCompare(b.id, 'en'),
       )
     : [];
+const linkInfos = doc.data.links?.map((link) => getLinkInfo(link)) ?? [];
 
 const year = new Date().getFullYear();
 const startYear =
@@ -120,12 +122,20 @@ const components = {
           ) : null
         }
         {
-          doc.data.links && doc.data.links.length > 0 && (
-            <>
-              <h2>{strings.links}</h2>
-              <Links links={doc.data.links} />
-            </>
-          )
+          [undefined, ...SERVICE_TYPES].map((type) => {
+            const infos = linkInfos.filter((info) => info.type === type);
+
+            if (infos.length === 0) {
+              return;
+            }
+
+            return (
+              <>
+                {type ? <h2>{strings[type]}</h2> : undefined}
+                <Links linkInfos={infos} />
+              </>
+            );
+          })
         }
       </main>
       {
@@ -185,7 +195,7 @@ const components = {
     --color-link: #2c5481;
     --color-link-hover: var(--color-accent);
     font-family: system-ui;
-    font-size: 16px;
+    font-size: 17px;
   }
 
   body {
@@ -223,16 +233,18 @@ const components = {
     display: inline-flex;
     align-items: center;
     height: 3rem;
+    margin: 0;
     margin-right: 1rem;
-    margin-bottom: 1rem;
   }
 
   .heading {
     display: inline-flex;
-    align-items: flex-start;
     gap: 0.75rem;
     vertical-align: middle;
     margin-bottom: 1rem;
+    flex-flow: column nowrap;
+    align-items: center;
+    width: 100%;
   }
 
   .title {
@@ -245,6 +257,7 @@ const components = {
     flex: 1 1;
     overflow-wrap: anywhere;
     word-wrap: balance;
+    text-align: center;
   }
 
   .title:hover {
@@ -252,8 +265,8 @@ const components = {
   }
 
   .icon {
-    width: 3rem;
-    height: 3rem;
+    width: 10rem;
+    height: 3.5rem;
     aspect-ratio: 1 / 1;
     max-width: 100%;
     flex: 0 0;
@@ -269,7 +282,6 @@ const components = {
     margin: 0;
     padding: 0;
     line-height: 3rem;
-    margin-bottom: 1rem;
   }
 
   .wrapper {
@@ -289,29 +301,5 @@ const components = {
 
   .footer {
     margin-top: 2rem;
-  }
-
-  @media (max-width: 512px) {
-    .heading {
-      flex-flow: column nowrap;
-      align-items: center;
-      width: 100%;
-    }
-
-    .back {
-      margin-bottom: 0;
-    }
-
-    .icon {
-      width: 10rem;
-    }
-
-    .title {
-      text-align: center;
-    }
-
-    .language-switcher {
-      margin-bottom: 0;
-    }
   }
 </style>

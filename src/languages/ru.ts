@@ -2,6 +2,8 @@ export default {
   label: 'RU',
   site: 'https://dehero.ru',
   strings: {
+    download: 'Скачивайте',
+    follow: 'Следите',
     from: 'С',
     links: 'Ссылки',
     projects: 'Проекты',
@@ -10,10 +12,12 @@ export default {
     email: 'Email',
     instagram: 'Instagram',
     lastfm: 'Last.fm',
+    max: 'MAX',
     nexusmods: 'Nexus Mods',
     steam: 'Steam',
     telegram: 'Telegram',
     vk: 'ВКонтакте',
     youtube: 'YouTube',
+    write: 'Пишите',
   },
 } as const;
