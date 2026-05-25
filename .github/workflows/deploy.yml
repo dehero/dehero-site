@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:      
+  workflow_dispatch:
 
 jobs:
   maintain:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       SITE_SSH_HOST: '${{ secrets.SITE_SSH_HOST }}'
       SITE_SSH_USER: '${{ secrets.SITE_SSH_USER }}'
