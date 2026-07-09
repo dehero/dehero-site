@@ -1,5 +1,9 @@
 name: maintain
 
+concurrency:
+  group: maintain
+  cancel-in-progress: true
+
 on:
   push:
     branches:
@@ -8,13 +12,8 @@ on:
 
 jobs:
   maintain:
-    runs-on: self-hosted
-    env:
-      SITE_SSH_HOST: '${{ secrets.SITE_SSH_HOST }}'
-      SITE_SSH_USER: '${{ secrets.SITE_SSH_USER }}'
-      SITE_SSH_PRIVATE_KEY: '${{ secrets.SITE_SSH_PRIVATE_KEY }}'
-      SITE_SSH_PATH_EN: '${{ secrets.SITE_SSH_PATH_EN }}'
-      SITE_SSH_PATH_RU: '${{ secrets.SITE_SSH_PATH_RU }}'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v3
         with:
@@ -32,6 +31,41 @@ jobs:
       - name: Build English site version
         run: npm run build
 
+      - name: Upload English site build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist-en
+          path: dist/
+          include-hidden-files: true
+
+      - name: Build Russian site version
+        run: LANGUAGE=ru npm run build
+
+      - name: Upload Russian site build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist-ru
+          path: dist/
+          include-hidden-files: true
+
+  deploy:
+    needs: maintain
+    runs-on: self-hosted
+    timeout-minutes: 60
+    env:
+      SITE_SSH_HOST: '${{ secrets.SITE_SSH_HOST }}'
+      SITE_SSH_USER: '${{ secrets.SITE_SSH_USER }}'
+      SITE_SSH_PRIVATE_KEY: '${{ secrets.SITE_SSH_PRIVATE_KEY }}'
+      SITE_SSH_PATH_EN: '${{ secrets.SITE_SSH_PATH_EN }}'
+      SITE_SSH_PATH_RU: '${{ secrets.SITE_SSH_PATH_RU }}'
+
+    steps:
+      - name: Download English site build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-dist-en
+          path: dist/
+
       - name: Deploy English site version
         uses: easingthemes/ssh-deploy@v5.1.0
         env:
@@ -40,7 +74,7 @@ jobs:
           SOURCE: 'dist/'
           REMOTE_HOST: ${{ env.SITE_SSH_HOST }}
           REMOTE_USER: ${{ env.SITE_SSH_USER }}
-          TARGET: ${{ env.SITE_SSH_PATH_EN }}
+          TARGET: ${{ env.SITE_SSH_PATH_EN}}
           SCRIPT_BEFORE: |
             whoami
             ls -al > /dev/null
@@ -50,8 +84,11 @@ jobs:
             echo $RSYNC_STDOUT
             exit
 
-      - name: Build Russian site version
-        run: LANGUAGE=ru npm run build
+      - name: Download Russian site build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-dist-ru
+          path: dist/
 
       - name: Deploy Russian site version
         uses: easingthemes/ssh-deploy@v5.1.0
