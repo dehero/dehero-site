@@ -137,6 +137,16 @@ const components = {
             );
           })
         }
+
+        {
+          doc.data.started && (
+            <p class="timeline">
+              {doc.data.started.toLocaleDateString(currentLanguage, { dateStyle: 'long' })}{' '}
+              {doc.data.finished &&
+                ' — ' + doc.data.finished.toLocaleDateString(currentLanguage, { dateStyle: 'long' })}
+            </p>
+          )
+        }
       </main>
       {
         indexDocInfo && (
