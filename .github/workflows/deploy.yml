@@ -38,16 +38,6 @@ jobs:
           path: dist/
           include-hidden-files: true
 
-      - name: Build Russian site version
-        run: LANGUAGE=ru npm run build
-
-      - name: Upload Russian site build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: site-dist-ru
-          path: dist/
-          include-hidden-files: true
-
   deploy:
     needs: maintain
     runs-on: self-hosted
@@ -75,30 +65,6 @@ jobs:
           REMOTE_HOST: ${{ env.SITE_SSH_HOST }}
           REMOTE_USER: ${{ env.SITE_SSH_USER }}
           TARGET: ${{ env.SITE_SSH_PATH_EN}}
-          SCRIPT_BEFORE: |
-            whoami
-            ls -al > /dev/null
-          SCRIPT_AFTER: |
-            whoami
-            ls -al > /dev/null
-            echo $RSYNC_STDOUT
-            exit
-
-      - name: Download Russian site build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: site-dist-ru
-          path: dist/
-
-      - name: Deploy Russian site version
-        uses: easingthemes/ssh-deploy@v5.1.0
-        env:
-          SSH_PRIVATE_KEY: ${{ env.SITE_SSH_PRIVATE_KEY }}
-          ARGS: '-rltgoDzvO --delete'
-          SOURCE: 'dist/'
-          REMOTE_HOST: ${{ env.SITE_SSH_HOST }}
-          REMOTE_USER: ${{ env.SITE_SSH_USER }}
-          TARGET: ${{ env.SITE_SSH_PATH_RU }}
           SCRIPT_BEFORE: |
             whoami
             ls -al > /dev/null
