@@ -1,7 +1,7 @@
 {
   "name": "dehero-site",
   "description": "My personal site's source code",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "repository": "https://github.com/dehero/dehero-site",
   "author": "dehero <me@dehero.site>",
   "private": true,
