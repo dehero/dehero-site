@@ -26,7 +26,7 @@ const services = {
   },
   max: {
     type: 'follow',
-    regex: /max\.ru/,
+    regex: /max\.ru\/(channel_[^\/]+)/,
   },
   nexusmods: {
     type: 'download',
