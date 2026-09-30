@@ -69,7 +69,9 @@ export type LinkInfo =
       uri: string;
     };
 
-export function getLinkInfo(uri: string): LinkInfo {
+export function getLinkInfo(link: string | Record<string, string>, language: string): LinkInfo {
+  const uri = typeof link === 'string' ? link : link[language] ?? '';
+
   for (const [service, descriptor] of Object.entries(services)) {
     const { type, regex } = descriptor;
     const [match, label] = regex.exec(uri) || [];

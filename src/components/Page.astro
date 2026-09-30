@@ -37,7 +37,7 @@ const projectInfos =
           a.id.localeCompare(b.id, 'en'),
       )
     : [];
-const linkInfos = doc.data.links?.map((link) => getLinkInfo(link)) ?? [];
+const linkInfos = doc.data.links?.map((link) => getLinkInfo(link, currentLanguage)) ?? [];
 
 const year = new Date().getFullYear();
 const startYear =
