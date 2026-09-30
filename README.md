@@ -84,7 +84,7 @@ Supported frontmatter fields are `description`, `metaTitle`, `metaDescription`, 
 objects with `en` and `ru` values.
 
 The root page lists all documents except `index`, ordered by `updateFrequency`, start date, and document ID. Links are
-grouped when their services are recognised by `src/entities/services.ts`.
+grouped when their services are recognized by `src/entities/services.ts`.
 
 ## Assets
 
@@ -94,9 +94,8 @@ Store images used by a document next to it in `docs/images/` and reference them 
 
 ## Content Model
 
-`dehero.site` is the permanent index of significant projects, works, documents,
-and other materials. Materials use root-level URLs without mandatory category
-prefixes, for example:
+`dehero.site` is the permanent index of significant projects, works, documents, and other materials. Materials use
+root-level URLs without mandatory category prefixes, for example:
 
 ```text
 /mwscr/
@@ -104,40 +103,34 @@ prefixes, for example:
 /highlights/
 ```
 
-A material can grow from a small work into a project, become archived, or get
-its own site without changing its `dehero.site` URL. Types, dates, tags, and
-relationships are presentation metadata, not restrictions on what a material
+A material can grow from a small work into a project, become archived, or get its own site without changing its
+`dehero.site` URL. Types, dates, tags, and relationships are presentation metadata, not restrictions on what a material
 can become.
 
 ## Site Roles
 
-- `dehero.site` — permanent pages for significant materials and the index that
-  connects them.
-- `highlights.dehero.site` — planned dedicated site for Dehero Highlights, a
-  chronological microblog with announcements, project updates, process notes,
-  thoughts, and impressions.
-- Project subdomains, such as `mwscr.dehero.site` — independent products with
-  their own native content.
+- `dehero.site` — permanent pages for significant materials and the index that connects them.
+- `posts.dehero.site` — dedicated site for Dehero Highlights, a chronological microblog with announcements, project
+  updates, process notes, thoughts, and impressions.
+- Project subdomains, such as `mwscr.dehero.site` — independent products with their own native content.
 
-The `/highlights/` page already exists on the main site as the permanent page
-for Dehero Highlights. It can later link to the dedicated subdomain.
+The `/highlights/` page already exists on the main site as the permanent page for Dehero Highlights. It can later link
+to the dedicated subdomain.
 
 ## Publishing Works
 
 Use this rule when publishing new work:
 
-1. If it naturally belongs to an independent project site, publish the
-   canonical result there.
+1. If it naturally belongs to an independent project site, publish the canonical result there.
 2. Otherwise, publish it as a permanent root-level page on `dehero.site`.
-3. Announce every newly published work page or project-site result in Dehero
-   Highlights, linking to its canonical location.
+3. Announce every newly published work page or project-site result in Dehero Highlights, linking to its canonical
+   location.
 
-Highlights entries do not need a corresponding page on `dehero.site`. They may
-remain short, time-bound posts about work in progress, minor updates, thoughts,
-personal events, or impressions.
+Highlights entries do not need a corresponding page on `dehero.site`. They may remain short, time-bound posts about work
+in progress, minor updates, thoughts, personal events, or impressions.
 
-For work related to a project without its own subdomain, both pages stay at the
-root of `dehero.site` and link to one another:
+For work related to a project without its own subdomain, both pages stay at the root of `dehero.site` and link to one
+another:
 
 ```text
 /project/
